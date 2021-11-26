@@ -1,0 +1,83 @@
+import 'package:flutter/material.dart';
+
+import '../../blocs/blocs.dart';
+import '../../shares/GeneralColors.dart';
+import '../pages.dart';
+
+class ItimeBottomNavigation extends StatefulWidget {
+  @override
+  _ItimeBottomNavigationState createState() => _ItimeBottomNavigationState();
+}
+
+class _ItimeBottomNavigationState extends State<ItimeBottomNavigation> {
+  NavigationBloc _bottomNavBarBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _bottomNavBarBloc = NavigationBloc();
+  }
+
+  @override
+  void dispose() {
+    _bottomNavBarBloc.close();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        body: StreamBuilder<NavBarItem>(
+          stream: _bottomNavBarBloc.itemStream,
+          initialData: _bottomNavBarBloc.defaultItem,
+          builder: (BuildContext context, AsyncSnapshot<NavBarItem> snapshot) {
+            switch (snapshot.data) {
+              case NavBarItem.TASK:
+                return ItimeTaskScreen();
+              case NavBarItem.NOTIFICATION:
+                return ItimeNotificationScreen();
+              case NavBarItem.CALENDAR:
+                return ItimeCalendarScreen();
+              case NavBarItem.PROFILE:
+                return ItimeProfileScreen();
+            }
+          },
+        ),
+        bottomNavigationBar: StreamBuilder(
+          stream: _bottomNavBarBloc.itemStream,
+          initialData: _bottomNavBarBloc.defaultItem,
+          builder: (BuildContext context, AsyncSnapshot<NavBarItem> snapshot) {
+            return BottomNavigationBar(
+              fixedColor: itime_main_color,
+              unselectedItemColor: iconColorSecondary,
+              showUnselectedLabels: true,
+              unselectedLabelStyle: TextStyle(color: iconColorSecondary),
+              currentIndex: snapshot.data.index,
+              onTap: _bottomNavBarBloc.pickItem,
+              items: [
+                BottomNavigationBarItem(
+                  label: 'Làm việc',
+                  icon: Icon(Icons.work),
+                ),
+                BottomNavigationBarItem(
+                  label: 'Thông báo',
+                  icon: Icon(Icons.notifications),
+                ),
+                BottomNavigationBarItem(
+                  label: 'Lịch',
+                  icon: Icon(Icons.calendar_today),
+                ),
+                BottomNavigationBarItem(
+                  label: 'Cá nhân',
+                  icon: Icon(Icons.person),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+}

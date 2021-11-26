@@ -1,0 +1,529 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:dropdown_search/dropdown_search.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:vao_ra/blocs/blocs.dart';
+import 'package:vao_ra/models/m3400_company_model.dart';
+import 'package:vao_ra/routes/router.dart';
+import 'package:vao_ra/shares/GeneralColors.dart';
+import 'package:vao_ra/shares/GeneralSizes.dart';
+import 'package:vao_ra/shares/shares.dart';
+import 'package:vao_ra/validators/login_validators.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:nb_utils/nb_utils.dart';
+import 'background.dart';
+
+class ItimeLogin extends StatefulWidget {
+  @override
+  _ItimeLoginState createState() => _ItimeLoginState();
+}
+
+class _ItimeLoginState extends State<ItimeLogin> {
+  // Get list from future
+  final companyBLOC = CompanyBloc();
+  final employeeBLOC = EmployeeBloc();
+  final loginBLOC = LoginBloc();
+
+  // Get list model
+  List<M3400CompanyModel> companyNameList = [];
+
+  // Define base data type
+  bool remember = false;
+  bool isPassword = true;
+  bool _loading = true;
+  bool _moveScreen = false;
+  bool isShow = true;
+
+  var stringCompany;
+  var companyId;
+  var companyName;
+
+  // define count
+  var count;
+
+  // Define object from library
+  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  TextEditingController _usernameController =
+      new TextEditingController(text: 'dat18090@gmail.com');
+  TextEditingController _passwordController =
+      new TextEditingController(text: '123456');
+  SharedPreferences preferences;
+
+  // Define datetime
+
+  // sub function
+  Future<dynamic> _loginStart(String idCompany, String email, String password) {
+    employeeBLOC.callWhat5507(
+        {"IdCompany": idCompany, "Email": email, "Password": password});
+  }
+
+  _listenCompanyStream() {
+    companyBLOC.companyStream3407.listen((event) {
+      companyNameList = companyBLOC.listCompany3407;
+    });
+  }
+
+  _init() async {
+    companyBLOC.callWhat3407();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(seconds: 3), () {
+      setState(() {
+        _loading = false;
+      });
+    });
+    _listenCompanyStream();
+  }
+
+//  _listenEmployeeStream() {
+//    employeeBLOC.employeeStream5507.listen((event) {
+//      count = employeeBLOC.count;
+//      print("bat dau dem "+count.toString());
+//      if (count == '1') {
+//        print('login thanh cong');
+//      } else {
+//        print('login ko thanh cong');
+//      }
+//    });
+//  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    companyBLOC.dispose();
+    employeeBLOC.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    _init();
+    // WIDGET SELECT COMPANY SECTION
+    Widget _selectCompanySection() {
+      return StreamBuilder<List<M3400CompanyModel>>(
+          stream: companyBLOC.companyStream3407,
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case (ConnectionState.waiting):
+                {
+                  return Container(
+                    height: 50,
+                    margin: EdgeInsets.symmetric(vertical: 5),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 3),
+                    width: size.width * 0.8,
+                    decoration: BoxDecoration(
+                      color: getColorFromHex("#FFEBEE"),
+                      borderRadius: BorderRadius.circular(29),
+                    ),
+                    child: DropdownSearch<String>(
+                      dropdownSearchDecoration: InputDecoration(
+                        border: InputBorder.none,
+                        contentPadding:
+                            EdgeInsets.only(left: 15.0, right: 15.0),
+                        fillColor: Colors.white,
+                      ),
+                      mode: Mode.BOTTOM_SHEET,
+                      maxHeight: 300,
+                      onChanged: (String data) {},
+                      selectedItem: "Loading...",
+                      showSearchBox: true,
+                      searchBoxDecoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                        ),
+                        contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+                        labelText: "Tìm kiếm công ty",
+                      ),
+                      popupTitle: Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: itime_main_color,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Công ty',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                      popupShape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(24),
+                          topRight: Radius.circular(24),
+                        ),
+                      ),
+                    ),
+                  );
+                }
+              default:
+                if (snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                } else {
+                  return Container(
+                    height: 50,
+                    margin: EdgeInsets.symmetric(vertical: 5),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 3),
+                    width: size.width * 0.8,
+                    decoration: BoxDecoration(
+                      color: getColorFromHex("#FFEBEE"),
+                      borderRadius: BorderRadius.circular(29),
+                    ),
+                    child: DropdownSearch<Object>(
+                      dropdownSearchDecoration: InputDecoration(
+                        border: InputBorder.none,
+                        contentPadding:
+                            EdgeInsets.only(left: 15.0, right: 15.0),
+                        fillColor: Colors.white,
+                      ),
+                      mode: Mode.BOTTOM_SHEET,
+                      maxHeight: 300,
+                      items: companyNameList.map((M3400CompanyModel model) {
+                        return '${model.CompanyName} - ${model.id}';
+                      }).toList(),
+                      onChanged: (Object data) {
+                        // Get string from data
+                        stringCompany = data;
+                        // Cut string from stringCompany
+                        var parts = stringCompany.toString().split('-');
+                        // First string on parts
+                        companyName = parts[0].trim();
+                        // Second string on parts
+                        companyId = parts.sublist(1).join('-').trim();
+                        print(companyName);
+                        print(companyId);
+                      },
+                      selectedItem: '--Chọn công ty--',
+                      showSearchBox: true,
+                      searchBoxDecoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                        ),
+                        contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+                        labelText: "Tìm kiếm công ty",
+                      ),
+                      popupTitle: Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: itime_main_color,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Công ty',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                      popupShape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(24),
+                          topRight: Radius.circular(24),
+                        ),
+                      ),
+                    ),
+                  );
+                }
+            }
+          });
+    }
+    // END WIDGET SELECT COMPANY SECTION
+
+    // WIDGET INPUT EMAIL AND PHONE NUMBER SECTION
+    Widget _inputEmailAndPhoneSection() {
+      return Container(
+        height: 50,
+        margin: EdgeInsets.symmetric(vertical: 5),
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+        width: size.width * 0.8,
+        decoration: BoxDecoration(
+          color: getColorFromHex("#FFEBEE"),
+          borderRadius: BorderRadius.circular(29),
+        ),
+        child: TextFormField(
+          onTap: () {
+            isShow = !isShow;
+          },
+          keyboardType: TextInputType.emailAddress,
+          cursorColor: itime_main_color,
+          controller: _usernameController,
+          decoration: InputDecoration(
+            icon: Icon(
+              Icons.person,
+              color: itime_main_color,
+            ),
+            hintText: 'Nhập email của bạn',
+            border: InputBorder.none,
+          ),
+        ),
+      );
+    }
+    // END WIDGET INPUT EMAIL AND PHONE NUMBER SECTION
+
+    // WIDGET INPUT PASSWORD SECTION
+    Widget _inputPasswordSection() {
+      return Container(
+        height: 50,
+        margin: EdgeInsets.symmetric(vertical: 5),
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+        width: size.width * 0.8,
+        decoration: BoxDecoration(
+          color: getColorFromHex("#FFEBEE"),
+          borderRadius: BorderRadius.circular(29),
+        ),
+        child: TextFormField(
+          obscureText: isPassword ? true : false,
+          cursorColor: itime_main_color,
+          controller: _passwordController,
+          decoration: InputDecoration(
+            hintText: "Nhập mật khẩu của bạn",
+            icon: Icon(
+              Icons.lock,
+              color: itime_main_color,
+            ),
+            suffixIcon: isPassword
+                ? InkWell(
+                    onTap: () {
+                      setState(() {
+                        isPassword = !isPassword;
+                      });
+                    },
+                    child: Icon(
+                      Icons.visibility_off,
+                      color: itime_main_color,
+                    ),
+                  )
+                : InkWell(
+                    onTap: () {
+                      setState(() {
+                        isPassword = !isPassword;
+                      });
+                    },
+                    child: Icon(
+                      Icons.visibility,
+                      color: itime_main_color,
+                    ),
+                  ),
+            border: InputBorder.none,
+          ),
+        ),
+      );
+    }
+    // END WIDGET INPUT PASSWORD SECTION
+
+    // WIDGET BUTTON LOGIN SECTION
+    Widget _buttonLoginSection() {
+      return Container(
+        margin: EdgeInsets.symmetric(vertical: 10),
+        width: size.width * 0.8,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(29),
+          child: FlatButton(
+            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+            color: itime_main_color,
+            onPressed: () {
+              if (_usernameController.text == '' ||
+                  _passwordController.text == '' ||
+                  companyId == '' ||
+                  companyId == 0) {
+                scaffoldKey.currentState.hideCurrentSnackBar();
+                scaffoldKey.currentState.showSnackBar(SnackBar(
+                  content: Text('Vui lòng nhập đầy đủ thông tin!',
+                      style: primaryTextStyle(color: Colors.white)),
+                  duration: Duration(seconds: 3),
+                  action: SnackBarAction(
+                      label: 'Ẩn',
+                      onPressed: () {
+                        scaffoldKey.currentState.hideCurrentSnackBar();
+                      }),
+                ));
+              } else if (_usernameController.text.length < 10 ||
+                  _passwordController.text.length < 5) {
+                scaffoldKey.currentState.hideCurrentSnackBar();
+                scaffoldKey.currentState.showSnackBar(SnackBar(
+                  content: Text('Email hoặc mật khẩu quá ít ký tự!',
+                      style: primaryTextStyle(color: Colors.white)),
+                  duration: Duration(seconds: 3),
+                  action: SnackBarAction(
+                      label: 'Ẩn',
+                      onPressed: () {
+                        scaffoldKey.currentState.hideCurrentSnackBar();
+                      }),
+                ));
+              } else if (_usernameController.text.length > 30 ||
+                  _passwordController.text.length > 30) {
+                scaffoldKey.currentState.hideCurrentSnackBar();
+                scaffoldKey.currentState.showSnackBar(SnackBar(
+                  content: Text('Email hoặc mật khẩu quá nhiều ký tự!',
+                      style: primaryTextStyle(color: Colors.white)),
+                  duration: Duration(seconds: 3),
+                  action: SnackBarAction(
+                      label: 'Ẩn',
+                      onPressed: () {
+                        scaffoldKey.currentState.hideCurrentSnackBar();
+                      }),
+                ));
+              } else if (_usernameController.text == _passwordController.text) {
+                scaffoldKey.currentState.hideCurrentSnackBar();
+                scaffoldKey.currentState.showSnackBar(SnackBar(
+                  content: Text('Email hoặc mật khẩu không được trùng!',
+                      style: primaryTextStyle(color: Colors.white)),
+                  duration: Duration(seconds: 3),
+                  action: SnackBarAction(
+                      label: 'Ẩn',
+                      onPressed: () {
+                        scaffoldKey.currentState.hideCurrentSnackBar();
+                      }),
+                ));
+              } else if (!LoginValidators.isEmail(_usernameController.text)) {
+                scaffoldKey.currentState.hideCurrentSnackBar();
+                scaffoldKey.currentState.showSnackBar(SnackBar(
+                  content: Text('Email không hợp lệ!',
+                      style: primaryTextStyle(color: Colors.white)),
+                  duration: Duration(seconds: 3),
+                  action: SnackBarAction(
+                      label: 'Ẩn',
+                      onPressed: () {
+                        scaffoldKey.currentState.hideCurrentSnackBar();
+                      }),
+                ));
+              } else if (_passwordController.text.contains('OR 1=1') ||
+                  _passwordController.text.contains('or 1=1') ||
+                  _passwordController.text.contains('1=1') ||
+                  _passwordController.text.contains('=') ||
+                  _passwordController.text.contains('-')) {
+                scaffoldKey.currentState.hideCurrentSnackBar();
+                scaffoldKey.currentState.showSnackBar(SnackBar(
+                  content: Text('Mật khẩu không hợp lệ!',
+                      style: primaryTextStyle(color: Colors.white)),
+                  duration: Duration(seconds: 3),
+                  action: SnackBarAction(
+                      label: 'Ẩn',
+                      onPressed: () {
+                        scaffoldKey.currentState.hideCurrentSnackBar();
+                      }),
+                ));
+              } else {
+                _loginStart(companyId, _usernameController.text,
+                    _passwordController.text);
+                employeeBLOC.employeeStream5507.listen((event) async {
+                  if (employeeBLOC.count.toString() == '1') {
+                    preferences = await SharedPreferences.getInstance();
+                    preferences.setString("pf_email", _usernameController.text);
+                    preferences.setString("pf_companyId", companyId);
+                    setState(() {
+                      // _moveScreen = !_moveScreen;
+                      // if (_moveScreen = true) {
+                      //   Future.delayed(Duration(seconds: 3), () {})
+                      //       .whenComplete(
+                      //           () => launchScreen(context, Routes.root));
+                      // }
+                    });
+                    ExtendedNavigator.of(context).push(Routes.root);
+                  } else {
+                    scaffoldKey.currentState.hideCurrentSnackBar();
+                    scaffoldKey.currentState.showSnackBar(SnackBar(
+                      content: Text('Sai thông tin tài khoản!',
+                          style: primaryTextStyle(color: Colors.white)),
+                      duration: Duration(seconds: 3),
+                      action: SnackBarAction(
+                          label: 'Ẩn',
+                          onPressed: () {
+                            scaffoldKey.currentState.hideCurrentSnackBar();
+                          }),
+                    ));
+                  }
+                });
+              }
+            },
+            child: _moveScreen == true
+                ? Text(
+                    'Đang xử lý...',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: itime_text_size_medium),
+                  )
+                : Text(
+                    'Đăng nhập',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: itime_text_size_medium),
+                  ),
+          ),
+        ),
+      );
+    }
+
+    // END WIDGET BUTTON LOGIN SECTION
+    return Scaffold(
+      backgroundColor: HexColor('#416dc4'),
+      body: SafeArea(
+        child: new LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+          final maxHeight = constraints.maxHeight;
+          final maxWidth = constraints.maxWidth;
+          final maxHeightLogin = maxHeight / 2;
+          final heightList = maxHeight - maxHeightLogin;
+          // this.width = maxWidth;
+          // this.height = maxHeight;
+          // this.heightOfThis = heightOfThis;
+          // final size40 = Ulti.getFontSize(width, height, 40);
+          // print('size40 $size40');
+          return Scaffold(
+            key: scaffoldKey,
+            body: _loading
+                ? spinKitCircleLoading(itime_main_color)
+                : Background(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          SizedBox(height: size.height * 0.03),
+                          Image.asset(
+                            "assets/images/itime/20943476.png",
+                            height: size.height * 0.20,
+                          ),
+                          SizedBox(height: size.height * 0.03),
+                          Column(
+                            children: [
+                              _selectCompanySection(),
+                              _inputEmailAndPhoneSection(),
+                              _inputPasswordSection(),
+                              _buttonLoginSection(),
+                            ],
+                          ),
+                          SizedBox(height: size.height * 0.03),
+                        ],
+                      ),
+                    ),
+                  ),
+          );
+        }),
+      ),
+    );
+  }
+}

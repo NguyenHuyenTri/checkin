@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "496618782483",
+    "project_id": "vaoraio",
+    "storage_bucket": "vaoraio.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:496618782483:android:df7c11edf9d803eb5664e6",
+        "android_client_info": {
+          "package_name": "com.izisoft.checkin.vaora"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "496618782483-l62mu2kqv7k49nofirgr2cuo3nthke1e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBg9uKepNo7XgEQ3R-i_Dkru9Q8_fRcpQQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "496618782483-l62mu2kqv7k49nofirgr2cuo3nthke1e.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "496618782483-pufrvojjm6nvnarmlklmjmeroof3v83s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.izi.vaoraio.check-in"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

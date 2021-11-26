@@ -1,0 +1,1 @@
+final List<String> languages = ['Tiếng việt','Tiếng anh'];

@@ -1,0 +1,108 @@
+name: vao_ra
+description: A new Flutter application.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.10.0 <3.0.0"
+
+analyzer:
+  enable-experiment:
+    - non-nullable
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.0
+  flutter_spinkit: ^4.1.2
+  auto_route: ^0.6.9
+  cached_network_image: ^2.3.1
+  flutter_svg: 0.18.1
+  i18n_extension: ^1.4.6
+#  hexcolor: ^2.0.0
+  flutter_bloc: ^6.1.1
+  equatable: ^1.0.2
+  mobx: ^1.2.1+4
+  nb_utils: ^3.3.0+8
+  dio: ^3.0.10
+  dropdown_search: ^0.4.8
+  fading_edge_scrollview: ^1.1.4
+  intl: ^0.16.1
+  date_utils: ^0.1.0+3
+  multi_image_picker: 4.0.3
+  charts_flutter: ^0.9.0
+  custom_navigation_bar: ^0.7.1
+  ant_icons: ^1.0.0
+  flutter_native_splash: ^0.3.0
+  logging: ^0.11.4
+  crypto: ^2.1.5
+  provider: ^4.3.3
+  shared_preferences: ^0.5.12+4
+  smart_select: ^4.3.2
+  camera: ^0.7.0+2
+  firebase_ml_vision: ^0.6.0
+  tflite_flutter: ^0.4.1
+  image: ^2.1.12
+  flutter_countdown_timer: ^3.0.0
+  carousel_slider: ^3.0.0
+  geolocator: ^6.1.14
+  google_maps_flutter: ^1.1.1
+  geocoding: ^1.0.5
+  image_picker:
+  custom_progress_dialog: ^1.0.5
+  timelines: ^0.0.2+1
+  future_progress_dialog: ^0.1.1
+  sentry: ^4.0.6
+  pull_to_refresh: 1.6.3
+  month_picker_dialog: ^0.3.3
+  uuid: ^2.2.2
+  syncfusion_flutter_datepicker: ^18.4.49-beta
+  syncfusion_flutter_calendar: ^18.4.49
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner: ^1.10.4
+  auto_route_generator: ^0.6.9
+  flutter_launcher_icons: ^0.8.0
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/logo.png"
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter.
+flutter:
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/images/icons/
+    - assets/images/itime/
+    - assets/images/marker.png
+    - assets/mobilefacenet.tflite
+
+  fonts:
+    - family: OpenSans
+      fonts:
+        - asset: assets/fonts/OpenSans/LICENSE.txt
+        - asset: assets/fonts/OpenSans/OpenSans-Bold.ttf
+        - asset: assets/fonts/OpenSans/OpenSans-BoldItalic.ttf
+        - asset: assets/fonts/OpenSans/OpenSans-ExtraBold.ttf
+        - asset: assets/fonts/OpenSans/OpenSans-ExtraBoldItalic.ttf
+        - asset: assets/fonts/OpenSans/OpenSans-Italic.ttf
+        - asset: assets/fonts/OpenSans/OpenSans-Light.ttf
+        - asset: assets/fonts/OpenSans/OpenSans-LightItalic.ttf
+        - asset: assets/fonts/OpenSans/OpenSans-Regular.ttf
+        - asset: assets/fonts/OpenSans/OpenSans-SemiBold.ttf
+        - asset: assets/fonts/OpenSans/OpenSans-SemiBoldItalic.ttf
+        - asset: assets/fonts/OpenSans/SIL Open Font License.txt
